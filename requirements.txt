@@ -1,0 +1,7 @@
+Flask==2.2.2
+Flask-RESTful
+Flask-SQLAlchemy
+PyMySQL
+Flask-Marshmallow
+Marshmallow-Sqlalchemy
+gunicorn

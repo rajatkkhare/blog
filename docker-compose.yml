@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  backend:
+    container_name: blog_backend
+    image: "blog_backend:${APP_VERSION}"
+    build:
+      dockerfile: Dockerfile
+    expose:
+      - 5000
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - db
+
+  db:
+    container_name: blog_db
+    image: mariadb:10.5
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - ./blog-storage/mariadb/:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  nginx:
+    container_name: blog_nginx
+    image: "blog_nginx:${APP_VERSION}"
+    build: ./services/nginx/
+    restart: unless-stopped
+    volumes:
+      - ./blog-storage/nginx/:/var/log/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
